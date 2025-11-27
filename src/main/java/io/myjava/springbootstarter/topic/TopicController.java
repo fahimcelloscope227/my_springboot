@@ -1,27 +1,29 @@
 package io.myjava.springbootstarter.topic;
 
-import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.myjava.springbootstarter.topic.models.Topic;
 
 
 
 @RestController
 public class TopicController {
 	
+	@Autowired
+	private TopicService topicService;
+	
 	
 	@GetMapping("/topics")
 	public List<Topic> getAllTopics() {
-		
-		return Arrays.asList(
-				new Topic("id","JAva","description"),
-				new Topic("id","JAva1.8","description1.8")
-		  );
-		
+		return topicService.getAllTopics();
+	}
+	
+	@GetMapping("/topics/{id}")
+	public Topic getTopic(@PathVariable String id) {
+		return topicService.getTopic(id);
 	}
 	
 

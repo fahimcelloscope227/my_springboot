@@ -1,4 +1,4 @@
-package io.myjava.springbootstarter.topic.models;
+package io.myjava.springbootstarter.topic;
 
 public class Topic {
 	

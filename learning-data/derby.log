@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sun Nov 30 12:05:45 BDT 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): instance a816c00e-019a-d35e-04b7-000002d342a8 
+on database directory memory:/Users/md.fahimislam/Documents/workspace-spring-tools-for-eclipse-4.32.2.RELEASE/learning-data/4a752fa9-203b-4e78-8519-2c601c97dae1 with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@67424e82 
+Loaded from file:/Users/md.fahimislam/.m2/repository/org/apache/derby/derby/10.16.1.1/derby-10.16.1.1.jar
+java.vendor=Eclipse Adoptium
+java.runtime.version=17+35
+user.dir=/Users/md.fahimislam/Documents/workspace-spring-tools-for-eclipse-4.32.2.RELEASE/learning-data
+os.name=Mac OS X
+os.arch=aarch64
+os.version=15.6.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

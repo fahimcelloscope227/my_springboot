@@ -9,18 +9,18 @@ public class Topic {
 	@Id
 	public String id;
 	public String name;
-	public String descriptions;
+	public String description;
 	
 	
 	public Topic() {
 		
 	}
 	
-	public Topic(String id, String name, String descriptions) {
+	public Topic(String id, String name, String description) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.descriptions = descriptions;
+		this.description = description;
 	}
 	public String getId() {
 		return id;
@@ -34,11 +34,11 @@ public class Topic {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDescriptions() {
-		return descriptions;
+	public String getDescription() {
+		return description;
 	}
-	public void setDescriptions(String descriptions) {
-		this.descriptions = descriptions;
+	public void setDescription(String descriptions) {
+		this.description = descriptions;
 	}
 	
 	

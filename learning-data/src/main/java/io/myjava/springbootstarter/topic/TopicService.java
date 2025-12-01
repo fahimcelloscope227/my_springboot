@@ -13,13 +13,7 @@ public class TopicService {
 	@Autowired
 	private TopicRepository topicRepository;
 	
-	
-	
-	private List<Topic>  allTopics = new ArrayList<>(Arrays.asList(
-			new Topic("id1","JAva","description"),
-			new Topic("id2","JAva1.8","description1.8"),
-			new Topic("id3","JAva17","description17")
-	  ));
+
 	
 	public List<Topic> getAllTopics() {
 		List<Topic> allTopics = new ArrayList<>();

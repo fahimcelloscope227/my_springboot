@@ -31,9 +31,10 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/orders/{orderId}/track")
+    @GetMapping("/{orderId}/track")
     public ResponseEntity<String> trackOrder(@PathVariable String orderId) {
         trackOrderUsecase.trackOrder(orderId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.ok("Status: " + trackOrderUsecase.trackOrder(orderId));
+        
     }
 }

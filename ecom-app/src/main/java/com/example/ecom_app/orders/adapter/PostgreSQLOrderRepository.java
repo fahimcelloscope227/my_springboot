@@ -1,6 +1,5 @@
 package com.example.ecom_app.orders.adapter;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -9,14 +8,13 @@ import com.example.ecom_app.orders.adapter.output.repository.SpringDataOrderRepo
 import com.example.ecom_app.orders.domain.dto.FoodOrder;
 import com.example.ecom_app.orders.domain.ports.out.OrderRepositoryPort;
 
-
-//@Repository
-public class JPAOrderRepository implements OrderRepositoryPort {
+@Repository
+public class PostgreSQLOrderRepository implements OrderRepositoryPort {
 
     @Autowired
     private SpringDataOrderRepository repository;
 
-    public JPAOrderRepository(SpringDataOrderRepository repository) {
+    public PostgreSQLOrderRepository(SpringDataOrderRepository repository) {
         this.repository = repository;
     }
 
@@ -27,14 +25,16 @@ public class JPAOrderRepository implements OrderRepositoryPort {
 
     @Override
     public String findOrderById(String orderId) {
-        // Implementation for finding order by ID using JPA
-        OrderEntity entity = repository.findById(orderId).orElseThrow();
+        // Implementation for finding order by ID using PostgreSQL
+        OrderEntity entity = repository.findById(orderId).orElseThrow(
+            () -> new RuntimeException("Order not found with ID: " + orderId)
+        );
         FoodOrder order = mapToDomain(entity);
         return order.getStatus();
     }
 
     private OrderEntity mapToEntity(FoodOrder order) {
-        // Mapping logic from FoodOrder to OrderEntity
+        // Mapping logic from FoodOrder to OrderEntity for PostgreSQL
         OrderEntity entity = new OrderEntity();
         // Set properties from order to entity
         entity.setOrderId(order.getOrderId());
@@ -47,7 +47,7 @@ public class JPAOrderRepository implements OrderRepositoryPort {
     }
 
     private FoodOrder mapToDomain(OrderEntity entity) {
-        // Mapping logic from OrderEntity to FoodOrder
+        // Mapping logic from OrderEntity to FoodOrder for PostgreSQL
         FoodOrder order = new FoodOrder();
         // Set properties from entity to order
         order.setOrderId(entity.getOrderId());
@@ -58,5 +58,4 @@ public class JPAOrderRepository implements OrderRepositoryPort {
 
         return order;
     }
-
 }

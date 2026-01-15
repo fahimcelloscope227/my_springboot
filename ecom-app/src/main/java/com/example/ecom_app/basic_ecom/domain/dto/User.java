@@ -22,4 +22,13 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+
+    public Boolean isActive() {
+        return isEnabled != null && isEnabled;
+    }
+    
+    public Boolean isPasswordMatched(String inputPassword) {
+        return password != null && password.equals(inputPassword);
+    }
+
 }

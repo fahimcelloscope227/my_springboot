@@ -43,7 +43,7 @@ public class UserEntity {
     )
     private Set<RoleEntity> roles = new HashSet<>();
     
-    private Boolean isEnabled;
+    private Boolean enabled;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - DemoApplication",
+            "request": "launch",
+            "mainClass": "com.example.ecom_app.DemoApplication",
+            "projectName": "ecom-app",
+            "cwd": "${workspaceFolder}/ecom-app"
+        },
+        {
+            "type": "java",
+            "name": "Run Spring Boot - DemoApplication",
+            "request": "launch",
+            "mainClass": "com.example.ecom_app.DemoApplication",
+            "projectName": "ecom-app",
+            "cwd": "${workspaceFolder}/ecom-app",
+            "args": ""
+        }
+    ]
+}

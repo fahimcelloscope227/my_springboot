@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class User {
     private Long id;
@@ -17,16 +20,16 @@ public class User {
     private String password;
     private String phoneNumber;
     private String address;
+    @Builder.Default
     private Set<String> roles = new HashSet<>();
-    private Boolean isEnabled;
+    private Boolean enabled;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
     public Boolean isActive() {
-        return isEnabled != null && isEnabled;
+        return enabled != null && enabled;
     }
-    
+
     public Boolean isPasswordMatched(String inputPassword) {
         return password != null && password.equals(inputPassword);
     }

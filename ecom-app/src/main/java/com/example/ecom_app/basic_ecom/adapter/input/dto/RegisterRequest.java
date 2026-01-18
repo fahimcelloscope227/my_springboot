@@ -3,7 +3,9 @@ package com.example.ecom_app.basic_ecom.adapter.input.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 // ==================== REQUEST DTOs ====================
@@ -11,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class RegisterRequest {
     @NotBlank
     private String name;

@@ -8,28 +8,34 @@ import com.example.ecom_app.basic_ecom.domain.ports.output.TokenGeneratorPort;
 import com.example.ecom_app.basic_ecom.domain.ports.output.UserRepositoryPort;
 import com.example.ecom_app.basic_ecom.domain.exceptions.InvalidCredentialsException;
 import com.example.ecom_app.basic_ecom.domain.exceptions.UserAlreadyExistsException;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+@Service
 public class AuthenticationService implements AuthenticationUsecase, RegisterUserUsecase {
     private final UserRepositoryPort userRepository;
     private final PasswordEncoderPort passwordEncoder;
     private final TokenGeneratorPort tokenGenerator;
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 
-    public AuthenticationService(UserRepositoryPort userRepository, PasswordEncoderPort passwordEncoder, TokenGeneratorPort tokenGenerator) {
+    public AuthenticationService(UserRepositoryPort userRepository, PasswordEncoderPort passwordEncoder,
+            TokenGeneratorPort tokenGenerator) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenGenerator = tokenGenerator;
     }
 
-
     @Override
     public String authenticate(String email, String password) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new InvalidCredentialsException("No User Found"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidCredentialsException("No User Found"));
 
-        if(!user.isActive()) {
+        if (!user.isActive()) {
             throw new InvalidCredentialsException("User is not active");
         }
 
-        if(!user.isPasswordMatched(password)) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidCredentialsException("Password Not matched");
         }
 
@@ -42,16 +48,17 @@ public class AuthenticationService implements AuthenticationUsecase, RegisterUse
             throw new UserAlreadyExistsException("User with email " + email + " already exists");
         }
 
+        log.info("Registering user with email from AuthService: {}", email);
+
         User user = User.builder()
                 .name(name)
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .phoneNumber(phoneNumber)
-                .isEnabled(true)
+                .enabled(true)
                 .build();
 
         return userRepository.save(user);
     }
-
 
 }

@@ -9,18 +9,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-// ==================== REQUEST DTOs ====================
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoginRequest {
-    @Email
-    @NotBlank
+public class AuthResponse {
+    private String token;
+    private String type = "Bearer";
+    private Long userId;
     private String email;
-    
-    @NotBlank
-    private String password;
-} 
+    private String name;
+}

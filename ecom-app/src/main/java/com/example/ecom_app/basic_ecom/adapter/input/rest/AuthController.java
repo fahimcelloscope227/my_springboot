@@ -13,6 +13,7 @@ import com.example.ecom_app.basic_ecom.adapter.input.dto.ApiResponse;
 import com.example.ecom_app.basic_ecom.adapter.input.dto.AuthResponse;
 import com.example.ecom_app.basic_ecom.adapter.input.dto.LoginRequest;
 import com.example.ecom_app.basic_ecom.adapter.input.dto.RegisterRequest;
+import com.example.ecom_app.basic_ecom.domain.dto.LoginResult;
 import com.example.ecom_app.basic_ecom.domain.dto.User;
 import com.example.ecom_app.basic_ecom.domain.ports.input.AuthenticationUsecase;
 import com.example.ecom_app.basic_ecom.domain.ports.input.RegisterUserUsecase;
@@ -36,12 +37,14 @@ public class AuthController {
   @PostMapping("/login")
   public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
     log.info("Login attempt for email: {}", loginRequest.getEmail());
-    String token = authenticationUsecase.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+    LoginResult result = authenticationUsecase.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
 
-    log.info("token ===> {}", token != null ? "generated" : "not generated");
     AuthResponse authResponse = AuthResponse.builder()
-        .token(token)
+        .token(result.getToken())
         .type("Bearer")
+        .userId(result.getUser().getId())
+        .email(result.getUser().getEmail())
+        .name(result.getUser().getName())
         .build();
 
     return ResponseEntity.ok(ApiResponse.builder()

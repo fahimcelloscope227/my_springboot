@@ -1,5 +1,6 @@
 package com.example.ecom_app.basic_ecom.domain.services;
 
+import com.example.ecom_app.basic_ecom.domain.dto.LoginResult;
 import com.example.ecom_app.basic_ecom.domain.dto.User;
 import com.example.ecom_app.basic_ecom.domain.ports.input.AuthenticationUsecase;
 import com.example.ecom_app.basic_ecom.domain.ports.input.RegisterUserUsecase;
@@ -27,7 +28,7 @@ public class AuthenticationService implements AuthenticationUsecase, RegisterUse
     }
 
     @Override
-    public String authenticate(String email, String password) {
+    public LoginResult authenticate(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new InvalidCredentialsException("No User Found"));
 
@@ -39,7 +40,12 @@ public class AuthenticationService implements AuthenticationUsecase, RegisterUse
             throw new InvalidCredentialsException("Password Not matched");
         }
 
-        return tokenGenerator.generateToken(user);
+        String token = tokenGenerator.generateToken(user);
+
+        return LoginResult.builder()
+                .token(token)
+                .user(user)
+                .build();
     }
 
     @Override

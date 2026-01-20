@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.ecom_app.products.adapter.dto.ProductResult; 
 import com.example.ecom_app.products.domain.dto.Product;
+
 import com.example.ecom_app.products.domain.port.in.GetProductsUseCase;
 import com.example.ecom_app.products.domain.port.out.ProductsRepositoryPort;
 
@@ -18,9 +20,24 @@ public class ProductsService  implements  GetProductsUseCase{
     } 
 
     @Override
-    public List<Product> getAllProducts() {
+    public List<ProductResult> getAllProducts() {
         List<Product> products = productsRepositoryPort.getAllProducts();
-        return products;
+        return mapToProductResult(products);
     }
+
+    List<ProductResult> mapToProductResult(List<Product> products) {
+        return products.stream()
+                .map(product -> new ProductResult(
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription(),
+                        product.getPrice()
+                ))
+                .toList();
+    }
+
+
+
+
 
 }

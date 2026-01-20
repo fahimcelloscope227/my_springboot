@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecom_app.basic_ecom.adapter.input.dto.ApiResponse;
-import com.example.ecom_app.products.domain.dto.Product;
-import com.example.ecom_app.products.domain.port.in.GetProductsUseCase;
+import com.example.ecom_app.products.adapter.dto.ProductResult;
+ import com.example.ecom_app.products.domain.port.in.GetProductsUseCase;
 
 @RestController
 @RequestMapping("/api/")
@@ -24,7 +24,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<ApiResponse> getAllProducts() {
-        List<Product> products = getProductsUseCase.getAllProducts();
+        List<ProductResult> products = getProductsUseCase.getAllProducts();
  
         return ResponseEntity.ok(ApiResponse.builder()
         .success(true)

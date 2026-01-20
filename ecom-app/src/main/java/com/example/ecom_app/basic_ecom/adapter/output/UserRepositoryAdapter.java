@@ -34,7 +34,6 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        springDataUserRepository.findByEmail(email);
         return springDataUserRepository.findByEmail(email)
                 .map(this::toDomain);
     }

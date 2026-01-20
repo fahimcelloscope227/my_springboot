@@ -1,14 +1,17 @@
-package com.example.ecom_app.basic_ecom.domain.dto;
+package com.example.ecom_app.products.domain.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import com.example.ecom_app.basic_ecom.domain.dto.Category;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Product {
     private Long id;
@@ -21,4 +24,8 @@ public class Product {
     private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public Product(Long id, String name, String description, BigDecimal price) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

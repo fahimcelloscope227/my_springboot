@@ -2,55 +2,68 @@ package com.example.ecom_app.products.adapter.out;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.ecom_app.basic_ecom.domain.dto.Category;
-import com.example.ecom_app.products.adapter.out.entities.CategoryEntity;
-import com.example.ecom_app.products.adapter.out.entities.ProductEntity;
-import com.example.ecom_app.products.adapter.out.repositories.SpringDataProductRepisotory;
 import com.example.ecom_app.products.domain.dto.Product;
 import com.example.ecom_app.products.domain.port.out.ProductsRepositoryPort;
 
 @Repository
 public class ProductRepositoryAdapter implements ProductsRepositoryPort {
 
-    private final SpringDataProductRepisotory springDataProductRepisotory;
+    private final JdbcTemplate jdbcTemplate;
 
-    public ProductRepositoryAdapter(SpringDataProductRepisotory springDataProductRepisotory) {
-        this.springDataProductRepisotory = springDataProductRepisotory;
+    public ProductRepositoryAdapter(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public List<Product> getAllProducts() {
-        List<ProductEntity> allProducts = springDataProductRepisotory.findAll();
-        return allProducts.stream().map(this::mapToDomain).toList();
+        String sql = """
+                SELECT
+                    p.id as p_id, p.name as p_name, p.description as p_description,
+                    p.price as p_price, p.stock_quantity as p_stock, p.image_url as p_image,
+                    p.is_active as p_active, p.created_at as p_created, p.updated_at as p_updated,
+                    c.id as c_id, c.name as c_name, c.description as c_description,
+                    c.created_at as c_created, c.updated_at as c_updated
+                FROM products p
+                LEFT JOIN categories c ON p.category_id = c.id
+                """;
+
+        return jdbcTemplate.query(sql, productRowMapper());
     }
 
-    private Product mapToDomain(ProductEntity productEntity) {
-        return Product.builder()
-                .id(productEntity.getId())
-                .name(productEntity.getName())
-                .description(productEntity.getDescription())
-                .price(productEntity.getPrice())
-                .stockQuantity(productEntity.getStockQuantity())
-                .imageUrl(productEntity.getImageUrl())
-                .category(mapToCategoryDomain(productEntity.getCategory()))
-                .isActive(productEntity.getIsActive())
-                .createdAt(productEntity.getCreatedAt())
-                .updatedAt(productEntity.getUpdatedAt())
-                .build();
-    }
+    private RowMapper<Product> productRowMapper() {
+        return (rs, rowNum) -> {
+            Category category = null;
+            if (rs.getObject("c_id") != null) {
+                category = Category.builder()
+                        .id(rs.getLong("c_id"))
+                        .name(rs.getString("c_name"))
+                        .description(rs.getString("c_description"))
+                        .createdAt(rs.getTimestamp("c_created") != null ? rs.getTimestamp("c_created").toLocalDateTime()
+                                : null)
+                        .updatedAt(rs.getTimestamp("c_updated") != null ? rs.getTimestamp("c_updated").toLocalDateTime()
+                                : null)
+                        .build();
+            }
 
-    private Category mapToCategoryDomain(CategoryEntity categoryEntity) {
-        if (categoryEntity == null)
-            return null;
-        return Category.builder()
-                .id(categoryEntity.getId())
-                .name(categoryEntity.getName())
-                .description(categoryEntity.getDescription())
-                .createdAt(categoryEntity.getCreatedAt())
-                .updatedAt(categoryEntity.getUpdatedAt())
-                .build();
+            return Product.builder()
+                    .id(rs.getLong("p_id"))
+                    .name(rs.getString("p_name"))
+                    .description(rs.getString("p_description"))
+                    .price(rs.getBigDecimal("p_price"))
+                    .stockQuantity(rs.getInt("p_stock"))
+                    .imageUrl(rs.getString("p_image"))
+                    .isActive(rs.getBoolean("p_active"))
+                    .createdAt(rs.getTimestamp("p_created") != null ? rs.getTimestamp("p_created").toLocalDateTime()
+                            : null)
+                    .updatedAt(rs.getTimestamp("p_updated") != null ? rs.getTimestamp("p_updated").toLocalDateTime()
+                            : null)
+                    .category(category)
+                    .build();
+        };
     }
-
 }

@@ -1,4 +1,5 @@
 package com.example.ecom_app.products.adapter.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,4 @@ public class ProductResult {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public ProductResult(Long id, String name, String description, BigDecimal price) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

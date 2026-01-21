@@ -25,7 +25,4 @@ public class Product {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Product(Long id, String name, String description, BigDecimal price) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

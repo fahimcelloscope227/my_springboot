@@ -28,8 +28,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/h2-console/**", "/actuator/**").permitAll()
-                        .requestMatchers("/api/products/**").authenticated()
+                        .requestMatchers("/api/auth/**", "/api/products/**", "/h2-console/**", "/actuator/**")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())

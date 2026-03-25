@@ -6,4 +6,5 @@ import com.example.ecom_app.products.domain.dto.Product;
     
     public List<Product> getAllProducts();
 
+    public Product saveProduct(Product product);
 }

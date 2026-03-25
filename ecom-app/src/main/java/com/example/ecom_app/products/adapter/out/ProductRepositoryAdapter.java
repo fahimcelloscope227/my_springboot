@@ -1,5 +1,6 @@
 package com.example.ecom_app.products.adapter.out;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,6 +8,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.ecom_app.basic_ecom.domain.dto.Category;
+import com.example.ecom_app.products.adapter.out.entities.ProductEntity;
+import com.example.ecom_app.products.adapter.out.entities.CategoryEntity;
+import com.example.ecom_app.products.adapter.out.repositories.SpringDataProductRepisotory;
 import com.example.ecom_app.products.domain.dto.Product;
 import com.example.ecom_app.products.domain.port.out.ProductsRepositoryPort;
 
@@ -14,9 +18,12 @@ import com.example.ecom_app.products.domain.port.out.ProductsRepositoryPort;
 public class ProductRepositoryAdapter implements ProductsRepositoryPort {
 
     private final JdbcTemplate jdbcTemplate;
+    private final SpringDataProductRepisotory springDataProductRepository;
 
-    public ProductRepositoryAdapter(JdbcTemplate jdbcTemplate) {
+    public ProductRepositoryAdapter(JdbcTemplate jdbcTemplate,
+                                    SpringDataProductRepisotory springDataProductRepository) {
         this.jdbcTemplate = jdbcTemplate;
+        this.springDataProductRepository = springDataProductRepository;
     }
 
     @Override
@@ -33,6 +40,40 @@ public class ProductRepositoryAdapter implements ProductsRepositoryPort {
                 """;
 
         return jdbcTemplate.query(sql, productRowMapper());
+    }
+
+    @Override
+    public Product saveProduct(Product product) {
+        ProductEntity.ProductEntityBuilder entityBuilder = ProductEntity.builder()
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .stockQuantity(product.getStockQuantity())
+                .imageUrl(product.getImageUrl())
+                .isActive(true)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now());
+
+        // Set category if provided
+        if (product.getCategory() != null && product.getCategory().getId() != null) {
+            entityBuilder.category(CategoryEntity.builder()
+                    .id(product.getCategory().getId())
+                    .build());
+        }
+
+        ProductEntity savedEntity = springDataProductRepository.save(entityBuilder.build());
+
+        return Product.builder()
+                .id(savedEntity.getId())
+                .name(savedEntity.getName())
+                .description(savedEntity.getDescription())
+                .price(savedEntity.getPrice())
+                .stockQuantity(savedEntity.getStockQuantity())
+                .imageUrl(savedEntity.getImageUrl())
+                .isActive(savedEntity.getIsActive())
+                .createdAt(savedEntity.getCreatedAt())
+                .updatedAt(savedEntity.getUpdatedAt())
+                .build();
     }
 
     private RowMapper<Product> productRowMapper() {
